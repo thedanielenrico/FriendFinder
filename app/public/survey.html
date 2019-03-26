@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://code.jquery.com/jquery.js"></script>
+    <script src="../data/friends.js"></script>
+    <script src="../routing/apiRoutes.js"></script>
+
+    <title>Friend Finder</title>
+</head>
+
+<body>
+    <h1>Survey</h1>
+    <form>
+        First name: <input type="text" name="FirstName" id="userName"><br>
+        Last name: <input type="text" name="FirstName" id="userLastName"><br>
+
+        <input type="submit" value="Submit" id="submit">
+    </form>
+    <script>
+        $("#submit").on('click', function () {
+            event.preventDefault();
+            var newUser = {
+                name: $("#userName").val().trim(),
+                lastName: $("#userLastName").val().trim()
+            }
+            console.log(newUser)
+            $.post("api/friends", newUser)
+                .then(function (data) {
+                    console.log(data)
+                })
+
+        })
+
+    </script>
+</body>
+
+</html>
