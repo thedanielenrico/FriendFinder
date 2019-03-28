@@ -1,11 +1,11 @@
 var existingUsers = require("../data/friends");
 var path = require("path");
-var friendsAPI = require("../data/friends")
+// var friendsAPI = require("../data/friends")
 
 
 module.exports = apiRoutes = function (router) {
     router.get("/api/friends", function (req, res) {
-        res.json(friendsAPI);
+        res.json(existingUsers);
     });
     router.post("/api/friends", function (req, res) {
         let newUserScores = req.body.surveyScores;

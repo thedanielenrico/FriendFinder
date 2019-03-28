@@ -38,8 +38,8 @@
         </div>
         <h1>Survey</h1>
         <form>
-            Enter your name: <input type="text" name="FirstName" id="userName"><br>
-            Enter URL of your image: <input type="url" name="imageURL" id="imageURL"><br>
+            Enter your name: <input type="text" name="FirstName" id="userName" class="userInfo-form" required><br>
+            Enter URL of your image: <input type="url" name="imageURL" id="imageURL" class="userInfo-form" required><br>
 
             <h3><strong>Question 1</strong></h3>
             <h4>You like chocolate</h4>
@@ -227,6 +227,14 @@
         }
         function validate() {
             var valid = true;
+
+            $(".userInfo-form").each(function(){
+                if ($(this).val() === ""){
+                    valid = false;
+                }
+            })
+
+
             $(".chosen-select").each(function () {
                 if ($(this).val() === '') {
                     valid = false;
