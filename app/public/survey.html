@@ -17,6 +17,25 @@
 
 <body>
     <div class="container">
+        <div class="modal" tabindex="-1" role="dialog" id="resultsModal">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Your new friend!</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p id="newFriendName"></p>
+                        <img id="newFriendImage" src="" alt="Picture of your new Friend" style="width: 200px">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
         <h1>Survey</h1>
         <form>
             Enter your name: <input type="text" name="FirstName" id="userName"><br>
@@ -26,7 +45,7 @@
             <h4>You like chocolate</h4>
             <div class="input-group mb-3">
                 <select class="chosen-select" id="q1">
-                    <option selected>Choose...</option>
+                    <option selected value="">Choose...</option>
                     <option value="1">One (Strongly Agree)</option>
                     <option value="2">Two</option>
                     <option value="3">Three</option>
@@ -40,7 +59,7 @@
             <h4>Sometimes the rain is nice</h4>
             <div class="input-group mb-3">
                 <select class="chosen-select" id="q2">
-                    <option selected>Choose...</option>
+                    <option selected value="">Choose...</option>
                     <option value="1">One (Strongly Agree)</option>
                     <option value="2">Two</option>
                     <option value="3">Three</option>
@@ -55,7 +74,7 @@
             <h4>But if it's too hot, you want to move to a cooler climate</h4>
             <div class="input-group mb-3">
                 <select class="chosen-select" id="q3">
-                    <option selected>Choose...</option>
+                    <option selected value="">Choose...</option>
                     <option value="1">One (Strongly Agree)</option>
                     <option value="2">Two</option>
                     <option value="3">Three</option>
@@ -69,7 +88,7 @@
             <h4>Small talk doesn't come naturally to you.</h4>
             <div class="input-group mb-3">
                 <select class="chosen-select" id="q4">
-                    <option selected>Choose...</option>
+                    <option selected value="">Choose...</option>
                     <option value="1">One (Strongly Agree)</option>
                     <option value="2">Two</option>
                     <option value="3">Three</option>
@@ -83,7 +102,7 @@
             <h4>New situations are always exciting.</h4>
             <div class="input-group mb-3">
                 <select class="chosen-select" id="q5">
-                    <option selected>Choose...</option>
+                    <option selected value="">Choose...</option>
                     <option value="1">One (Strongly Agree)</option>
                     <option value="2">Two</option>
                     <option value="3">Three</option>
@@ -97,7 +116,7 @@
             <h4>The mystery of tomorrow makes you anxious.</h4>
             <div class="input-group mb-3">
                 <select class="chosen-select" id="q6">
-                    <option selected>Choose...</option>
+                    <option selected value="">Choose...</option>
                     <option value="1">One (Strongly Agree)</option>
                     <option value="2">Two</option>
                     <option value="3">Three</option>
@@ -111,7 +130,7 @@
             <h4>Above all else you appreciate cold hard facts.</h4>
             <div class="input-group mb-3">
                 <select class="chosen-select" id="q7">
-                    <option selected>Choose...</option>
+                    <option selected value="">Choose...</option>
                     <option value="1">One (Strongly Agree)</option>
                     <option value="2">Two</option>
                     <option value="3">Three</option>
@@ -125,7 +144,7 @@
             <h4>You feel for the people suffering around the world.</h4>
             <div class="input-group mb-3">
                 <select class="chosen-select" id="q8">
-                    <option selected>Choose...</option>
+                    <option selected value="">Choose...</option>
                     <option value="1">One (Strongly Agree)</option>
                     <option value="2">Two</option>
                     <option value="3">Three</option>
@@ -139,7 +158,7 @@
             <h4>You only let a few people get really close to you.</h4>
             <div class="input-group mb-3">
                 <select class="chosen-select" id="q9">
-                    <option selected>Choose...</option>
+                    <option selected value="">Choose...</option>
                     <option value="1">One (Strongly Agree)</option>
                     <option value="2">Two</option>
                     <option value="3">Three</option>
@@ -153,7 +172,7 @@
             <h4>Death is the only thing to be scared of.</h4>
             <div class="input-group mb-3">
                 <select class="chosen-select" id="q10">
-                    <option selected>Choose...</option>
+                    <option selected value="">Choose...</option>
                     <option value="1">One (Strongly Agree)</option>
                     <option value="2">Two</option>
                     <option value="3">Three</option>
@@ -165,7 +184,7 @@
 
 
 
-            <input type="submit" value="Submit" id="submit">
+            <input type="submit" value="Submit" id="submit" data-target="#resultsModal">
         </form>
     </div>
 
@@ -177,10 +196,11 @@
 <script>
     $("#submit").on('click', function (event) {
         event.preventDefault();
+
         var newUser = {
             name: $("#userName").val().trim(),
             image: $("#imageURL").val().trim(),
-            scores: [
+            surveyScores: [
                 $("#q1").val().trim(),
                 $("#q2").val().trim(),
                 $("#q3").val().trim(),
@@ -193,11 +213,30 @@
                 $("#q10").val().trim(),
             ],
         }
-        // console.log(newUser)
-        $.post("api/friends", newUser)
-            .then(function (data) {
-                console.log(data)
+
+        if (!validate()) {
+            alert("Fill in the form!")
+            return
+        } else {
+            $.post("api/friends", newUser)
+                .then(function (data) {
+                    $("#newFriendName").text(data.name)
+                    $("#newFriendImage").attr("src", data.image)
+                    $("#resultsModal").modal("toggle")
+                })
+        }
+        function validate() {
+            var valid = true;
+            $(".chosen-select").each(function () {
+                if ($(this).val() === '') {
+                    valid = false;
+                }
             })
+            return valid;
+        }
+
+        validate();
+
 
     })
 </script>
