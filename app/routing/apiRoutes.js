@@ -1,6 +1,5 @@
 var existingUsers = require("../data/friends");
 var path = require("path");
-// var friendsAPI = require("../data/friends")
 
 
 module.exports = apiRoutes = function (router) {
@@ -34,5 +33,6 @@ module.exports = apiRoutes = function (router) {
 
         }
         res.json(existingUsers[lowestID])
+        existingUsers.push(req.body)
     });
 }
