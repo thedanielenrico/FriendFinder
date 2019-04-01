@@ -2,7 +2,7 @@ var friendsList = [
   {
     name: "Dan",
     image: "https://www.wonderplugin.com/videos/demo-image0.jpg",
-    surveyScores: [1, 2, 3, 4, 5, 1, 2, 3, 4, 5]
+    surveyScores: ['1', '2', '3', '4', '5', '1', '2', '3', '4', '5']
   },
   {
     name: 'Ahmed',
